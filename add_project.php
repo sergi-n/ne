@@ -40,7 +40,7 @@
     }
 
     // final
-    if(isset($project) && !isset($errors)) {
+    // if(isset($project) && !isset($errors)) {
 
         $sql_request = 'SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = \'projector_studio\' AND TABLE_NAME = \'projects\' ';
         $dbreply = $connect -> query($sql_request);
@@ -48,8 +48,7 @@
         $last_id = $last_id[0];
         echo $last_id;
 
-    }
-
+    // }
     // print_r($errors);
     // print_r($_FILES);
     // print_r($project);
