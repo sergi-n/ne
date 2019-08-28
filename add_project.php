@@ -40,15 +40,32 @@
     }
 
     // final
-    // if(isset($project) && !isset($errors)) {
+    if(isset($project) && !isset($errors)) {
 
-        $sql_request = 'SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = \'projector_studio\' AND TABLE_NAME = \'projects\' ';
+        $sql_request = 'SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = \'projector_studio\' AND TABLE_NAME = \'projects\'';
         $dbreply = $connect -> query($sql_request);
-        $last_id = $dbreply -> fetch(PDO::FETCH_NUM);
-        $last_id = $last_id[0];
-        echo $last_id;
+        $project_id = $dbreply -> fetch(PDO::FETCH_NUM);
+        $project_id = $project_id[0];
 
-    // }
+        $upload_folder = 'project_images/';
+        $project_images_folder = $upload_folder.$project_id;
+        if (!file_exists($project_images_folder)) {
+            $create_folder = mkdir($project_images_folder);
+            if (!$create_folder)) {
+                exit;
+            }
+        }
+
+        foreach ($project['photos'] as $value) {
+            $project_image_new_location = $project_images_folder.$value['name'];
+            $move_image = move_uploaded_file($value['tmp_name'], $project_image_new_location);
+            if ($move_image) {
+                array_push($project['photos'], $project_image_new_location) 
+            }
+        }
+    }
+
+
     // print_r($errors);
     // print_r($_FILES);
     // print_r($project);
