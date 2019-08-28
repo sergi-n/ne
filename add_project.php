@@ -56,11 +56,14 @@
             }
         }
 
+        
         foreach ($project['photos'] as $value) {
             $project_image_new_location = $project_images_folder.$value['name'];
             $move_image = move_uploaded_file($value['tmp_name'], $project_image_new_location);
             if ($move_image) {
-                array_push($project['photos'], $project_image_new_location) 
+                array_push($project['photos'], $project_image_new_location);
+            } else {
+                exit;
             }
         }
     }
