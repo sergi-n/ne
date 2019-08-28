@@ -81,45 +81,6 @@
 
     }
 
-    // print_r($errors);
-    // print_r($_FILES);
-    // print_r($project);
-    // Project photos validation
-    // if (isset($project['project_title']) && isset($project['project_description'])) {
-    //     $upload_folder = 'projects_images/'.$project['project_title'];
-    //     $project['photos'] = [];
-
-    //     for ($i = 0; $i < 5; $i++ ) {
-    //         $key = 'project_photo_'.$i;
-            
-    //         if (isset($_FILES[$key]) && !empty($_FILES[$key]['tmp_name'])) {                
-
-    //             if (!file_exists($upload_folder)) {
-    //                 mkdir($upload_folder);
-    //             }
-
-    //             $uploaded_file_name = $upload_folder.'/ '.$_FILES[$key]['name'];
-    //             move_uploaded_file($_FILES[$key]['tmp_name'], $uploaded_file_name);
-    //             array_push($project['photos'], $uploaded_file_name);
-    //         }
-    //     }
-
-    //     if (!file_exists($upload_folder)) {
-    //         $errors['project_photo'] = 'პროექტისთვის მინიმუმ ერთი ფოტოს ატვირთვა სავალდებულოა';
-    //     }
-
-    // } else {
-    //     for ($i = 0; $i < 5; $i++) {
-    //         $key = 'project_photo_'.$i;
-
-    //         if(isset($_FILES[$key]) && !empty($_FILES[$key]['tmp_name'])) {
-    //             break;
-    //         } else if ($i == 4) {
-    //             $errors['project_photos'] = 'პროექტისთვის მინიმუმ ერთი ფოტოს ატვირთვა სავალდებულოა';
-    //         }
-    //     }
-    // }
-
 ?>
 
     <!DOCTYPE html>
