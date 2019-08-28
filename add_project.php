@@ -22,8 +22,7 @@
         }
     }
 
-    // Project images validation
-    
+    // Project images validation    
     for ($i = 0; $i < 5; $i++) {
         $key = 'project_photo_'.$i;
 
@@ -38,8 +37,8 @@
     if (isset($project)  && !array_key_exists('photos', $project)) {
         $errors['photos'] = 'გთხოვთ ატვირთოთ პროექტის სურათი/სურათები';
     }
-    print_r($project);
-    // final
+
+    // Move images to final location
     if(isset($project) && !isset($errors)) {
 
         $sql_request = 'SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = \'projector_studio\' AND TABLE_NAME = \'projects\'';
@@ -63,7 +62,24 @@
         }
         
     }
+    // Write to base
+    if (isset($project) && !isset($errors)) {
+        $sql_request = 'INSERT INTO projects (project_title, project_description, project_photo_0, project_photo_1, project_photo_2, project_photo_3, project_photo_4) VALUES (:project_title, :project_description, :project_photo_0, :project_photo_1, :project_photo_2, :project_photo_3, :project_photo_4)';
+        $prepared_sql_request = $connect -> prepare($sql_request);
+        $prepared_sql_request -> bindValue(':project_title', $project['project_title']);
+        $prepared_sql_request -> bindValue(':project_description', $project['project_description']);
+        
+        for ($i = 0; $i < 5; $i++) {
+            if (isset($project['photos'][$i])) {
+                $prepared_sql_request -> bindValue(':project_photo_'.$i, $project['photos'][$i]);
+            } else {
+                $prepared_sql_request -> bindValue(':project_photo_'.$i, '');
+            }
+        }
 
+        $prepared_sql_request -> execute();
+
+    }
 
     // print_r($errors);
     // print_r($_FILES);
@@ -103,24 +119,6 @@
     //         }
     //     }
     // }
-
-    if (isset($project['project_title']) && isset($project['project_description']) && isset($project['photos'])) {
-        $sql_request = 'INSERT INTO projects (project_title, project_description, project_photo_0, project_photo_1, project_photo_2, project_photo_3, project_photo_4) VALUES (:project_title, :project_description, :project_photo_0, :project_photo_1, :project_photo_2, :project_photo_3, :project_photo_4)';
-        $prepared_sql_request = $connect -> prepare($sql_request);
-        $prepared_sql_request -> bindValue(':project_title', $project['project_title']);
-        $prepared_sql_request -> bindValue(':project_description', $project['project_description']);
-        
-        for ($i = 0; $i < 5; $i++) {
-            if (isset($project['photos'][$i])) {
-                $prepared_sql_request -> bindValue(':project_photo_'.$i, $project['photos'][$i]);
-            } else {
-                $prepared_sql_request -> bindValue(':project_photo_'.$i, '');
-            }
-        }
-
-        $prepared_sql_request -> execute();
-
-    }
 
 ?>
 
