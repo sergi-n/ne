@@ -38,7 +38,7 @@
     if (isset($project)  && !array_key_exists('photos', $project)) {
         $errors['photos'] = 'გთხოვთ ატვირთოთ პროექტის სურათი/სურათები';
     }
-
+    print_r($project);
     // final
     if(isset($project) && !isset($errors)) {
 
@@ -51,21 +51,17 @@
         $project_images_folder = $upload_folder.$project_id;
         if (!file_exists($project_images_folder)) {
             $create_folder = mkdir($project_images_folder);
-            if (!$create_folder)) {
+            if (!$create_folder) {
                 exit;
             }
         }
-
         
-        foreach ($project['photos'] as $value) {
-            $project_image_new_location = $project_images_folder.$value['name'];
-            $move_image = move_uploaded_file($value['tmp_name'], $project_image_new_location);
-            if ($move_image) {
-                array_push($project['photos'], $project_image_new_location);
-            } else {
-                exit;
-            }
+        for ($i = 0; $i < count($project['photos']); $i++) {
+            $project_image_new_location = $project_images_folder.'/'.$project['photos'][$i]['name'];
+            $move_image = move_uploaded_file($project['photos'][$i]['tmp_name'], $project_image_new_location);
+            $project['photos'][$i] = $project_image_new_location;
         }
+        
     }
 
 
