@@ -22,7 +22,7 @@
         }
     }
 
-    // Project images validation    
+    // Project images validation
     for ($i = 0; $i < 5; $i++) {
         $key = 'project_photo_'.$i;
 
@@ -35,13 +35,13 @@
     }
 
     if (isset($project)) {
-        if (!array_key_exists('photos', $project)) {     
-            $errors['project_photos'] = 'გთხოვთ ატვირთოთ პროექტის სურათი/სურათები';       
+        if (!array_key_exists('photos', $project)) {
+            $errors['project_photos'] = 'გთხოვთ ატვირთოთ პროექტის სურათი/სურათები';
         }
     } else {
         $errors['project_photos'] = 'გთხოვთ ატვირთოთ პროექტის სურათი/სურათები';
     }
-    
+
     // Move images to final location
     if(isset($project) && !isset($errors)) {
 
@@ -58,7 +58,7 @@
                 exit;
             }
         }
-        
+
         for ($i = 0; $i < count($project['photos']); $i++) {
             $project_image_new_location = $project_images_folder.'/'.$project['photos'][$i]['name'];
             $move_image = move_uploaded_file($project['photos'][$i]['tmp_name'], $project_image_new_location);
@@ -72,7 +72,7 @@
         $prepared_sql_request = $connect -> prepare($sql_request);
         $prepared_sql_request -> bindValue(':project_title', $project['project_title']);
         $prepared_sql_request -> bindValue(':project_description', $project['project_description']);
-        
+
         for ($i = 0; $i < 5; $i++) {
             if (isset($project['photos'][$i])) {
                 $prepared_sql_request -> bindValue(':project_photo_'.$i, $project['photos'][$i]);
@@ -103,7 +103,7 @@
 
             <label for="project_title">Project title</label>
             <input id="project_title" type="text" name="project_title">
-            <?php 
+            <?php
             if (isset($errors['project_title'])) {
                 echo($errors['project_title']);
             }
@@ -111,13 +111,13 @@
 
             <label for="project_description">Project description</label>
             <textarea id="project_description" name="project_description" cols="30" rows="10"></textarea>
-            <?php 
+            <?php
             if (isset($errors['project_description'])) {
                 echo($errors['project_description']);
             }
             ?>
 
-            <?php 
+            <?php
             if (isset($errors['project_photos'])) {
                 echo($errors['project_photos']);
             }
