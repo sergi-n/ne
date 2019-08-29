@@ -78,7 +78,7 @@
             $prepared_sql_request -> execute();
 
         }
-        
+
     }
 
 ?>
