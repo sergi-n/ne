@@ -35,51 +35,53 @@
                 $errors['project_photos'] = 'გთხოვთ ატვირთოთ პროექტის სურათი/სურათები';
             }
 
-        }
+        // Move images to final location
+        if(!isset($errors)) {
 
-    // Move images to final location
-    if(isset($project) && !isset($errors)) {
+            $sql_request = 'SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = \'projector_studio\' AND TABLE_NAME = \'projects\'';
+            $dbreply = $connect -> query($sql_request);
+            $project_id = $dbreply -> fetch(PDO::FETCH_NUM);
+            $project_id = $project_id[0];
 
-        $sql_request = 'SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = \'projector_studio\' AND TABLE_NAME = \'projects\'';
-        $dbreply = $connect -> query($sql_request);
-        $project_id = $dbreply -> fetch(PDO::FETCH_NUM);
-        $project_id = $project_id[0];
-
-        $upload_folder = 'project_images/';
-        $project_images_folder = $upload_folder.$project_id;
-        if (!file_exists($project_images_folder)) {
-            $create_folder = mkdir($project_images_folder);
-            if (!$create_folder) {
-                exit;
+            $upload_folder = 'project_images/';
+            $project_images_folder = $upload_folder.$project_id;
+            if (!file_exists($project_images_folder)) {
+                $create_folder = mkdir($project_images_folder);
+                if (!$create_folder) {
+                    exit;
+                }
             }
+
+            for ($i = 0; $i < count($project['photos']); $i++) {
+                $project_image_new_location = $project_images_folder.'/'.$project['photos'][$i]['name'];
+                $move_image = move_uploaded_file($project['photos'][$i]['tmp_name'], $project_image_new_location);
+                $project['photos'][$i] = $project_image_new_location;
+            }
+        
         }
 
-        for ($i = 0; $i < count($project['photos']); $i++) {
-            $project_image_new_location = $project_images_folder.'/'.$project['photos'][$i]['name'];
-            $move_image = move_uploaded_file($project['photos'][$i]['tmp_name'], $project_image_new_location);
-            $project['photos'][$i] = $project_image_new_location;
+        // Write to base
+        if (!isset($errors)) {
+            $sql_request = 'INSERT INTO projects (project_title, project_description, project_photo_0, project_photo_1, project_photo_2, project_photo_3, project_photo_4) VALUES (:project_title, :project_description, :project_photo_0, :project_photo_1, :project_photo_2, :project_photo_3, :project_photo_4)';
+            $prepared_sql_request = $connect -> prepare($sql_request);
+            $prepared_sql_request -> bindValue(':project_title', $project['project_title']);
+            $prepared_sql_request -> bindValue(':project_description', $project['project_description']);
+
+            for ($i = 0; $i < 5; $i++) {
+                if (isset($project['photos'][$i])) {
+                    $prepared_sql_request -> bindValue(':project_photo_'.$i, $project['photos'][$i]);
+                } else {
+                    $prepared_sql_request -> bindValue(':project_photo_'.$i, '');
+                }
+            }
+
+            $prepared_sql_request -> execute();
+
         }
         
     }
 
-    // Write to base
-    if (isset($project) && !isset($errors)) {
-        $sql_request = 'INSERT INTO projects (project_title, project_description, project_photo_0, project_photo_1, project_photo_2, project_photo_3, project_photo_4) VALUES (:project_title, :project_description, :project_photo_0, :project_photo_1, :project_photo_2, :project_photo_3, :project_photo_4)';
-        $prepared_sql_request = $connect -> prepare($sql_request);
-        $prepared_sql_request -> bindValue(':project_title', $project['project_title']);
-        $prepared_sql_request -> bindValue(':project_description', $project['project_description']);
 
-        for ($i = 0; $i < 5; $i++) {
-            if (isset($project['photos'][$i])) {
-                $prepared_sql_request -> bindValue(':project_photo_'.$i, $project['photos'][$i]);
-            } else {
-                $prepared_sql_request -> bindValue(':project_photo_'.$i, '');
-            }
-        }
-
-        $prepared_sql_request -> execute();
-
-    }
 
 
 
