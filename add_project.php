@@ -34,10 +34,14 @@
         }
     }
 
-    if (isset($project)  && !array_key_exists('photos', $project)) {
-        $errors['photos'] = 'გთხოვთ ატვირთოთ პროექტის სურათი/სურათები';
+    if (isset($project)) {
+        if (!array_key_exists('photos', $project)) {     
+            $errors['project_photos'] = 'გთხოვთ ატვირთოთ პროექტის სურათი/სურათები';       
+        }
+    } else {
+        $errors['project_photos'] = 'გთხოვთ ატვირთოთ პროექტის სურათი/სურათები';
     }
-
+    
     // Move images to final location
     if(isset($project) && !isset($errors)) {
 
@@ -99,10 +103,25 @@
 
             <label for="project_title">Project title</label>
             <input id="project_title" type="text" name="project_title">
+            <?php 
+            if (isset($errors['project_title'])) {
+                echo($errors['project_title']);
+            }
+            ?>
 
             <label for="project_description">Project description</label>
             <textarea id="project_description" name="project_description" cols="30" rows="10"></textarea>
-            
+            <?php 
+            if (isset($errors['project_description'])) {
+                echo($errors['project_description']);
+            }
+            ?>
+
+            <?php 
+            if (isset($errors['project_photos'])) {
+                echo($errors['project_photos']);
+            }
+            ?>
             <label for="project_photo_0">Project photo 0</label>
             <input id="project_photo_0" type="file" name="project_photo_0">
 
