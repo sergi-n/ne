@@ -2,45 +2,40 @@
 
     // require_once('config.php');
     require_once('connect.php');
-    $number_of_photos = 5;
 
-    // Project title validation
-    if (isset($_POST['project_title'])) {
-        if (!empty($_POST['project_title'])) {
+    if (isset($_POST['submit'])) {
+
+        // Project title validation
+        if (isset($_POST['project_title']) && !empty($_POST['project_title'])) {
             $project['project_title'] = $_POST['project_title'];
         } else {
             $errors['project_title'] = 'ველის შევსება სავალდებულოა';
         }
-    }
 
-    // Project description validation
-    if (isset($_POST['project_description'])) {
-        if (!empty($_POST['project_description'])) {
+        // Project description validation
+        if (isset($_POST['project_description']) && !empty($_POST['project_description'])) {
             $project['project_description'] = $_POST['project_description'];
         } else {
             $errors['project_description'] = 'ველის შევსება სავალდებულოა';
         }
-    }
 
-    // Project images validation
-    for ($i = 0; $i < 5; $i++) {
-        $key = 'project_photo_'.$i;
+        // Project images validation
+        for ($i = 0; $i < 5; $i++) {
+            $key = 'project_photo_'.$i;
 
-        if (isset($_FILES[$key]) && !empty($_FILES[$key]['tmp_name'])) {
-            if (!isset($project['photos'])) {
-                $project['photos'] = [];
+            if (isset($_FILES[$key]) && !empty($_FILES[$key]['tmp_name'])) {
+                if (!isset($project['photos'])) {
+                    $project['photos'] = [];
+                }
+                array_push($project['photos'], $_FILES[$key]);
             }
-            array_push($project['photos'], $_FILES[$key]);
         }
-    }
 
-    if (isset($project)) {
-        if (!array_key_exists('photos', $project)) {
-            $errors['project_photos'] = 'გთხოვთ ატვირთოთ პროექტის სურათი/სურათები';
+        if (!isset($project['photos'])) {
+                $errors['project_photos'] = 'გთხოვთ ატვირთოთ პროექტის სურათი/სურათები';
+            }
+
         }
-    } else {
-        $errors['project_photos'] = 'გთხოვთ ატვირთოთ პროექტის სურათი/სურათები';
-    }
 
     // Move images to final location
     if(isset($project) && !isset($errors)) {
@@ -66,6 +61,7 @@
         }
         
     }
+
     // Write to base
     if (isset($project) && !isset($errors)) {
         $sql_request = 'INSERT INTO projects (project_title, project_description, project_photo_0, project_photo_1, project_photo_2, project_photo_3, project_photo_4) VALUES (:project_title, :project_description, :project_photo_0, :project_photo_1, :project_photo_2, :project_photo_3, :project_photo_4)';
@@ -84,6 +80,8 @@
         $prepared_sql_request -> execute();
 
     }
+
+
 
 ?>
 
@@ -136,7 +134,8 @@
 
             <label for="project_photo_4">Project photo 4</label>
             <input id="project_photo_4" type="file" name="project_photo_4">
-            <input type="submit" value="პროექტის დამატება">
+
+            <input type="submit" name="submit" value="პროექტის დამატება">
         </form>
     </body>
 
