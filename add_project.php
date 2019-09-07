@@ -12,7 +12,7 @@
             $errors['project_title'] = 'ველის შევსება სავალდებულოა';
         }
 
-        // Project description validation
+        // Project description validation 
         if (isset($_POST['project_description']) && !empty($_POST['project_description'])) {
             $project['project_description'] = $_POST['project_description'];
         } else {
@@ -31,9 +31,9 @@
             }
         }
 
-        if (!isset($project['photos'])) {
+        if (isset($_FILES) && !isset($project['photos'])) {
                 $errors['project_photos'] = 'გთხოვთ ატვირთოთ პროექტის სურათი/სურათები';
-            }
+        }
 
         // Move images to final location
         if(!isset($errors)) {
