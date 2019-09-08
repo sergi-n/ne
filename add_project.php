@@ -97,27 +97,27 @@
     <body>
         <form action="add_project.php" method="POST" enctype="multipart/form-data">
 
+
+            <!-- Project title -->
+            <div id="project_title_error">
+                <?php echo (isset($errors['project_title']) ? $errors['project_title'] : '') ?>
+            </div>
             <label for="project_title">Project title</label>
             <input id="project_title" type="text" name="project_title">
-            <?php
-            if (isset($errors['project_title'])) {
-                echo($errors['project_title']);
-            }
-            ?>
 
+
+            <!-- Project Description -->
+            <div id="project_description_error">
+                <?php echo (isset($errors['project_title']) ? $errors['project_title'] : '') ?>
+            </div>
             <label for="project_description">Project description</label>
             <textarea id="project_description" name="project_description" cols="30" rows="10"></textarea>
-            <?php
-            if (isset($errors['project_description'])) {
-                echo($errors['project_description']);
-            }
-            ?>
 
-            <?php
-            if (isset($errors['project_photos'])) {
-                echo($errors['project_photos']);
-            }
-            ?>
+            
+            <!-- Project photos -->
+            <div id="project_description_error">
+                <?php echo (isset($errors['project_photos']) ? $errors['project_photos'] : '') ?>
+            </div>
             <label for="project_photo_0">Project photo 0</label>
             <input id="project_photo_0" type="file" name="project_photo_0">
 

@@ -3,13 +3,12 @@
 require_once('connect.php');
 
 if (isset($_GET['project_id'])) {
-    $project_id = $_GET['project_id']);
+    $project_id = $_GET['project_id'];
     $sql_request = 'SELECT * FROM projects WHERE id=:project_id';
     $prepared_sql_request = $connect -> prepare($sql_request);
     $prepared_sql_request -> bindValue(':project_id', $project_id);
     $prepared_sql_request -> execute();
     $reply = $prepared_sql_request -> fetch(PDO::FETCH_ASSOC);
-    print_r($reply);
 }
 
 ?>
@@ -26,20 +25,16 @@ if (isset($_GET['project_id'])) {
     <form action="add_project.php" method="POST" enctype="multipart/form-data">
 
         <label for="project_title">Project title</label>
-        <input id="project_title" type="text" name="project_title">
-        <?php
-            if (isset($errors['project_title'])) {
-                echo($errors['project_title']);
-            }
-        ?>
+        <input id="project_title" type="text" name="project_title" value="<?php echo ($reply['project_title'] ? $reply['project_title'] : '') ?>">
+        <div id="project_title_error">
+            <?php echo ($errors['project_title'] ? $errors['project_title'] : '') ?>
+        </div>
 
         <label for="project_description">Project description</label>
-        <textarea id="project_description" name="project_description" cols="30" rows="10"></textarea>
-        <?php
-            if (isset($errors['project_description'])) {
-                echo($errors['project_description']);
-            }
-        ?>
+        <textarea id="project_description" name="project_description" cols="30" rows="10"><?php echo ($reply['project_description'] ? $reply['project_description'] : '') ?></textarea>
+        <div id="project_description_error">
+            <?php echo ($errors['project_title'] ? $errors['project_title'] : '') ?>
+        </div>
 
         <?php
             if (isset($errors['project_photos'])) {
