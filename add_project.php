@@ -1,6 +1,7 @@
 <?php
 
     // require_once('config.php');
+
     require_once('connect.php');
 
     if (isset($_POST['submit'])) {
@@ -32,9 +33,10 @@
         }
 
         if (isset($_FILES) && !isset($project['photos'])) {
-                $errors['project_photos'] = 'გთხოვთ ატვირთოთ პროექტის სურათი/სურათები';
+            $errors['project_photos'] = 'გთხოვთ ატვირთოთ პროექტის სურათი/სურათები';
         }
 
+        
         // Move images to final location
         if(!isset($errors)) {
 
@@ -113,7 +115,7 @@
             <label for="project_description">Project description</label>
             <textarea id="project_description" name="project_description" cols="30" rows="10"></textarea>
 
-            
+
             <!-- Project photos -->
             <div id="project_description_error">
                 <?php echo (isset($errors['project_photos']) ? $errors['project_photos'] : '') ?>
@@ -133,6 +135,8 @@
             <label for="project_photo_4">Project photo 4</label>
             <input id="project_photo_4" type="file" name="project_photo_4">
 
+            
+            <!-- Submit -->
             <input type="submit" name="submit" value="პროექტის დამატება">
         </form>
     </body>
